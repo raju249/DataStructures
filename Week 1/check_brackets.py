@@ -16,17 +16,26 @@ class Bracket:
             return True
         return False
 
-if __name__ == "__main__":
-    text = sys.stdin.read()
-
-    opening_brackets_stack = []
-    for i, next in enumerate(text):
+def isBalanced(text):
+    stack = []
+    for index, next in enumerate(text, start = 1):
         if next == '(' or next == '[' or next == '{':
             # Process opening bracket, write your code here
-            pass
+            stack.append(Bracket(next, index))
 
         if next == ')' or next == ']' or next == '}':
             # Process closing bracket, write your code here
-            pass
+            if not stack:
+                return index
 
-    # Printing answer, write your code here
+            top = stack.pop()
+
+            if not top.Match(next):
+                return index
+    if stack:
+        return stack.pop().position
+    return "Success"
+
+if __name__ == "__main__":
+    text = sys.stdin.read()
+    print (isBalanced(text))
