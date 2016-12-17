@@ -8,18 +8,21 @@ class TreeHeight:
         def read(self):
                 self.n = int(sys.stdin.readline())
                 self.parent = list(map(int, sys.stdin.readline().split()))
+                self.heights = [0] * self.n
 
         def compute_height(self):
                 # Replace this code with a faster implementation
-                maxHeight = 0
-                for vertex in range(self.n):
-                        height = 0
-                        i = vertex
-                        while i != -1:
-                                height += 1
-                                i = self.parent[i]
-                        maxHeight = max(maxHeight, height);
-                return maxHeight;
+                return max([self.find_height(i) for i in range(self.n)])
+
+        def find_height(self, node):
+            if self.parent[node] == -1:
+                return 1
+
+            if self.heights[node]:
+                return self.heights[node]
+
+            self.heights[node] = 1 + self.find_height(self.parent[node])
+            return self.heights[node]
 
 def main():
   tree = TreeHeight()
