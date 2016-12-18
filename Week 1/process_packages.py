@@ -15,9 +15,39 @@ class Buffer:
         self.size = size
         self.finish_time_ = []
 
+    def isFull(self):
+        if self.size == len(self.finish_time_):
+            return True
+        return False
+
+    def isEmpty(self):
+        if len(self.finish_time_) == 0:
+            return True
+        return False
+
+    def getLast(self):
+        return self.finish_time_[-1]
+
+    def flushProcessed(self, request):
+        while self.finish_time_:
+            if self.finish_time_[0] <= request.arrival_time:
+                self.finish_time_.pop(0)
+            else:
+                break
+
     def Process(self, request):
-        # write your code here
-        return Response(False, -1)
+        self.flushProcessed(request)
+
+        if self.isFull():
+            return Response(True, -1)
+
+        if self.isEmpty():
+            self.finish_time_.append(request.arrival_time + request.process_time)
+            return Response(False, request.arrival_time)
+
+        response = Response(False, self.getLast())
+        self.finish_time_.append(self.getLast() + request.process_time)
+        return response
 
 def ReadRequests(count):
     requests = []
