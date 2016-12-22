@@ -1,4 +1,5 @@
 # python3
+import math
 
 class HeapBuilder:
   def __init__(self):
@@ -23,11 +24,35 @@ class HeapBuilder:
     # but in the worst case gives a quadratic number of swaps.
     #
     # TODO: replace by a more efficient implementation
-    for i in range(len(self._data)):
+    '''for i in range(len(self._data)):
       for j in range(i + 1, len(self._data)):
         if self._data[i] > self._data[j]:
           self._swaps.append((i, j))
-          self._data[i], self._data[j] = self._data[j], self._data[i]
+          self._data[i], self._data[j] = self._data[j], self._data[i]'''
+    start = math.floor(len(self._data) / 2)
+    for i in range(start, -1, -1):
+      self.siftDown(i)
+
+  def siftDown(self, i):
+        minIndex = i
+        l = self.leftChild(i)
+        if l <= len(self._data) - 1 and self._data[l] < self._data[minIndex]:
+          minIndex = l
+        r = self.rightChild(i)
+        if r <= len(self._data) - 1 and self._data[r] < self._data[minIndex]:
+          minIndex = r
+        if i != minIndex:
+          self._swaps.append((i,minIndex))
+          self._data[i], self._data[minIndex] = self._data[minIndex], self._data[i]
+          self.siftDown(minIndex)
+
+
+
+  def leftChild(self, i):
+    return 2 * i + 1
+
+  def rightChild(self, i):
+    return 2 * i + 2
 
   def Solve(self):
     self.ReadData()
