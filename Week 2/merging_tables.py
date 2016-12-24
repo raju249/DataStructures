@@ -32,12 +32,7 @@ class DisJointSet():
         if _src == _dest:
             return
 
-        if self.rank[_src] >= self.rank[_dest]:
-            self.parent[_src] = _dest
-        else:
-            self.parent[_dest] = _src
-            if self.rank[_src] == self.rank[_dest]:
-                self.rank[_src] = self.rank[_src] + 1
+        self.parent[_src] = _dest
 
         self.lines[_dest] += self.lines[_src]
         self.lines[_src] = 0
